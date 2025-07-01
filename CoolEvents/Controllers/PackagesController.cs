@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CoolEvents.Data;
+using CoolEvents.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CoolEvents.Data;
-using CoolEvents.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoolEvents.Controllers
 {
@@ -44,6 +45,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Packages/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +56,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("PackageId,Name,Description,Price")] Package package)
         {
             ModelState.Remove("Bookings");
@@ -68,6 +71,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Packages/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,6 +92,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("PackageId,Name,Description,Price")] Package package)
         {
             if (id != package.PackageId)
@@ -120,6 +125,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Packages/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,6 +146,7 @@ namespace CoolEvents.Controllers
         // POST: Packages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var package = await _context.Package.FindAsync(id);

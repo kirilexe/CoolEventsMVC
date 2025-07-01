@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CoolEvents.Data;
+using CoolEvents.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CoolEvents.Data;
-using CoolEvents.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoolEvents.Controllers
 {
@@ -44,6 +45,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Travelers/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +56,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("TravelerId,FirstName,LastName,Email")] Traveler traveler)
         {
             ModelState.Remove("Bookings");
@@ -67,6 +70,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Travelers/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,6 +91,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("TravelerId,FirstName,LastName,Email")] Traveler traveler)
         {
             if (id != traveler.TravelerId)
@@ -118,6 +123,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Travelers/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,6 +144,7 @@ namespace CoolEvents.Controllers
         // POST: Travelers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var traveler = await _context.Traveler.FindAsync(id);
