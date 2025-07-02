@@ -40,18 +40,21 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-// --- Seed Admin Role and User ---
+// --- Seed Roles and Admin User ---
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
-    // Create Admin role if it doesn't exist
-    var adminRole = "Admin";
-    if (!await roleManager.RoleExistsAsync(adminRole))
+    // Create roles if they don't exist
+    string[] roles = { "Admin", "Customer", "TravelAgent" };
+    foreach (var role in roles)
     {
-        await roleManager.CreateAsync(new IdentityRole(adminRole));
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
     }
 
     // Create an admin user if needed
@@ -63,11 +66,10 @@ using (var scope = app.Services.CreateScope())
         await userManager.CreateAsync(adminUser, "Admin123!"); // Change this password after first login
     }
     // Ensure user is in Admin role
-    if (!await userManager.IsInRoleAsync(adminUser, adminRole))
+    if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
     {
-        await userManager.AddToRoleAsync(adminUser, adminRole);
+        await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 }
-// --- End seeding ---
 
 app.Run();

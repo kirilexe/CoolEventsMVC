@@ -45,7 +45,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Bookings/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +56,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Create([Bind("BookingId,TravelerId,TripId,TripDate,Status")] Booking booking)
         {
             if (ModelState.IsValid)
@@ -69,7 +69,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Bookings/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +90,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Edit(int id, [Bind("BookingId,TravelerId,TripId,TripDate,Status")] Booking booking)
         {
             if (id != booking.BookingId)
@@ -122,7 +122,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Bookings/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +143,7 @@ namespace CoolEvents.Controllers
         // POST: Bookings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var booking = await _context.Booking.FindAsync(id);

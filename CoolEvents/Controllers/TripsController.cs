@@ -46,7 +46,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Trips/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public IActionResult Create()
         {
             return View();
@@ -57,7 +57,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Create([Bind("TripId,Destination,StartDate,EndDate,Price")] Trip trip)
         {
             ModelState.Remove("Bookings");
@@ -71,7 +71,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Trips/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,7 +92,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Edit(int id, [Bind("TripId,Destination,StartDate,EndDate,Price")] Trip trip)
         {
             if (id != trip.TripId)
@@ -125,7 +125,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Trips/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,7 +146,7 @@ namespace CoolEvents.Controllers
         // POST: Trips/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var trip = await _context.Trip.FindAsync(id);
