@@ -22,9 +22,14 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Trips
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Trip.ToListAsync());
+            var trips = from t in _context.Trip select t;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                trips = trips.Where(t => t.Destination.Contains(searchString));
+            }
+            return View(await trips.ToListAsync());
         }
 
         // GET: Trips/Details/5

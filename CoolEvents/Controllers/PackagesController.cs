@@ -20,9 +20,14 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Packages
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Package.ToListAsync());
+            var packages = from p in _context.Package select p;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                packages = packages.Where(p => p.Name.Contains(searchString) || p.Description.Contains(searchString));
+            }
+            return View(await packages.ToListAsync());
         }
 
         // GET: Packages/Details/5
