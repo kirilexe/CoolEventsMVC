@@ -10,23 +10,22 @@ using CoolEvents.Models;
 
 namespace CoolEvents.Controllers
 {
-    public class TripsController : Controller
+    public class DestinationsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TripsController(ApplicationDbContext context)
+        public DestinationsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Trips
+        // GET: Destinations
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Trip.Include(t => t.Destination);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Destination.ToListAsync());
         }
 
-        // GET: Trips/Details/5
+        // GET: Destinations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,43 +33,39 @@ namespace CoolEvents.Controllers
                 return NotFound();
             }
 
-            var trip = await _context.Trip
-                .Include(t => t.Destination)
-                .FirstOrDefaultAsync(m => m.TripId == id);
-            if (trip == null)
+            var destination = await _context.Destination
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (destination == null)
             {
                 return NotFound();
             }
 
-            return View(trip);
+            return View(destination);
         }
 
-        // GET: Trips/Create
+        // GET: Destinations/Create
         public IActionResult Create()
         {
-            ViewData["DestinationId"] = new SelectList(_context.Destination, "Id", "Country");
             return View();
         }
 
-        // POST: Trips/Create
+        // POST: Destinations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TripId,DestinationId,StartDate,EndDate,Price")] Trip trip)
+        public async Task<IActionResult> Create([Bind("Id,Country,City,Description")] Destination destination)
         {
-            ModelState.Remove("Bookings");
             if (ModelState.IsValid)
             {
-                _context.Add(trip);
+                _context.Add(destination);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DestinationId"] = new SelectList(_context.Destination, "Id", "Country", trip.DestinationId);
-            return View(trip);
+            return View(destination);
         }
 
-        // GET: Trips/Edit/5
+        // GET: Destinations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,37 +73,36 @@ namespace CoolEvents.Controllers
                 return NotFound();
             }
 
-            var trip = await _context.Trip.FindAsync(id);
-            if (trip == null)
+            var destination = await _context.Destination.FindAsync(id);
+            if (destination == null)
             {
                 return NotFound();
             }
-            ViewData["DestinationId"] = new SelectList(_context.Destination, "Id", "Country", trip.DestinationId);
-            return View(trip);
+            return View(destination);
         }
 
-        // POST: Trips/Edit/5
+        // POST: Destinations/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TripId,DestinationId,StartDate,EndDate,Price")] Trip trip)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Country,City,Description")] Destination destination)
         {
-            if (id != trip.TripId)
+            if (id != destination.Id)
             {
                 return NotFound();
             }
-            ModelState.Remove("Bookings");
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(trip);
+                    _context.Update(destination);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TripExists(trip.TripId))
+                    if (!DestinationExists(destination.Id))
                     {
                         return NotFound();
                     }
@@ -119,11 +113,10 @@ namespace CoolEvents.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DestinationId"] = new SelectList(_context.Destination, "Id", "Country", trip.DestinationId);
-            return View(trip);
+            return View(destination);
         }
 
-        // GET: Trips/Delete/5
+        // GET: Destinations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,35 +124,34 @@ namespace CoolEvents.Controllers
                 return NotFound();
             }
 
-            var trip = await _context.Trip
-                .Include(t => t.Destination)
-                .FirstOrDefaultAsync(m => m.TripId == id);
-            if (trip == null)
+            var destination = await _context.Destination
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (destination == null)
             {
                 return NotFound();
             }
 
-            return View(trip);
+            return View(destination);
         }
 
-        // POST: Trips/Delete/5
+        // POST: Destinations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trip = await _context.Trip.FindAsync(id);
-            if (trip != null)
+            var destination = await _context.Destination.FindAsync(id);
+            if (destination != null)
             {
-                _context.Trip.Remove(trip);
+                _context.Destination.Remove(destination);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TripExists(int id)
+        private bool DestinationExists(int id)
         {
-            return _context.Trip.Any(e => e.TripId == id);
+            return _context.Destination.Any(e => e.Id == id);
         }
     }
 }

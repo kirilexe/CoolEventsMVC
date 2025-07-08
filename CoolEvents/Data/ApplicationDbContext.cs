@@ -14,5 +14,6 @@ namespace CoolEvents.Data
         public DbSet<CoolEvents.Models.Package> Package { get; set; } = default!;
         public DbSet<CoolEvents.Models.Traveler> Traveler { get; set; } = default!;
         public DbSet<CoolEvents.Models.Trip> Trip { get; set; } = default!;
+        public DbSet<CoolEvents.Models.Destination> Destination { get; set; } = default!;
     }
 }
