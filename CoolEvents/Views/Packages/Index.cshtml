@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @item.Price.ToString("N0").Replace(",", " ")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PackageId">Edit</a> |
