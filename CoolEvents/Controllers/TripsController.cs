@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CoolEvents.Data;
+using CoolEvents.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CoolEvents.Data;
-using CoolEvents.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoolEvents.Controllers
 {
@@ -46,6 +47,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Trips/Create
+        [Authorize(Roles = "Admin, TravelAgent")]
         public IActionResult Create()
         {
             ViewData["DestinationId"] = new SelectList(_context.Destination, "Id", "Country");
@@ -57,6 +59,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Create([Bind("TripId,DestinationId,StartDate,EndDate,Price")] Trip trip)
         {
             ModelState.Remove("Bookings");
@@ -71,6 +74,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Trips/Edit/5
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,6 +96,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Edit(int id, [Bind("TripId,DestinationId,StartDate,EndDate,Price")] Trip trip)
         {
             if (id != trip.TripId)
@@ -124,6 +129,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Trips/Delete/5
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,6 +149,7 @@ namespace CoolEvents.Controllers
         }
 
         // POST: Trips/Delete/5
+        [Authorize(Roles = "Admin, TravelAgent")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

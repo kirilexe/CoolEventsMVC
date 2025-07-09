@@ -21,14 +21,10 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Bookings
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index()
         {
-            var bookings = from b in _context.Booking select b;
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                bookings = bookings.Where(b => b.Status.Contains(searchString) || b.TravelerId.ToString().Contains(searchString) || b.TripId.ToString().Contains(searchString));
-            }
-            return View(await bookings.ToListAsync());
+            var applicationDbContext = _context.Booking.Include(b => b.Traveler).Include(b => b.Trip);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Bookings/Details/5
@@ -40,6 +36,8 @@ namespace CoolEvents.Controllers
             }
 
             var booking = await _context.Booking
+                .Include(b => b.Traveler)
+                .Include(b => b.Trip)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
             if (booking == null)
             {
@@ -53,6 +51,8 @@ namespace CoolEvents.Controllers
         [Authorize(Roles = "Admin, TravelAgent")]
         public IActionResult Create()
         {
+            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId");
+            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId");
             return View();
         }
 
@@ -61,7 +61,6 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Create([Bind("BookingId,TravelerId,TripId,TripDate,Status")] Booking booking)
         {
             if (ModelState.IsValid)
@@ -70,6 +69,8 @@ namespace CoolEvents.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId", booking.TravelerId);
+            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId", booking.TripId);
             return View(booking);
         }
 
@@ -87,6 +88,8 @@ namespace CoolEvents.Controllers
             {
                 return NotFound();
             }
+            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId", booking.TravelerId);
+            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId", booking.TripId);
             return View(booking);
         }
 
@@ -123,6 +126,8 @@ namespace CoolEvents.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId", booking.TravelerId);
+            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId", booking.TripId);
             return View(booking);
         }
 
@@ -136,6 +141,8 @@ namespace CoolEvents.Controllers
             }
 
             var booking = await _context.Booking
+                .Include(b => b.Traveler)
+                .Include(b => b.Trip)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
             if (booking == null)
             {

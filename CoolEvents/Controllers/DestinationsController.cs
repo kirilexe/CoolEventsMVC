@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CoolEvents.Data;
+using CoolEvents.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CoolEvents.Data;
-using CoolEvents.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoolEvents.Controllers
 {
@@ -44,6 +45,7 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Destinations/Create
+        [Authorize(Roles = "Admin, TravelAgent")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +56,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Create([Bind("Id,Country,City,Description")] Destination destination)
         {
             if (ModelState.IsValid)
@@ -86,6 +89,7 @@ namespace CoolEvents.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Country,City,Description")] Destination destination)
         {
             if (id != destination.Id)
@@ -137,6 +141,7 @@ namespace CoolEvents.Controllers
         // POST: Destinations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, TravelAgent")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var destination = await _context.Destination.FindAsync(id);
