@@ -18,6 +18,10 @@ body {
     padding: 0;
     margin: 0;
     transition: all var(--transition-time) ease;
+    background-image: url('https://www.freepik.com/free-photos-vectors/blue-white');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 a {

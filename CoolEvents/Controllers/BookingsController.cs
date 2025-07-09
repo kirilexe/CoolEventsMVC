@@ -21,10 +21,14 @@ namespace CoolEvents.Controllers
         }
 
         // GET: Bookings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var applicationDbContext = _context.Booking.Include(b => b.Traveler).Include(b => b.Trip);
-            return View(await applicationDbContext.ToListAsync());
+            var bookings = _context.Booking.Include(b => b.Traveler).Include(b => b.Trip).AsQueryable();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                bookings = bookings.Where(b => b.Status.Contains(searchString) || b.Traveler.FirstName.Contains(searchString) || b.Traveler.LastName.Contains(searchString));
+            }
+            return View(await bookings.ToListAsync());
         }
 
         // GET: Bookings/Details/5
