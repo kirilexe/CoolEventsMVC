@@ -23,7 +23,11 @@ namespace CoolEvents.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index(string searchString)
         {
-            var bookings = _context.Booking.Include(b => b.Traveler).Include(b => b.Trip).AsQueryable();
+            var bookings = _context.Booking
+                .Include(b => b.Traveler)
+                .Include(b => b.Trip)
+                    .ThenInclude(t => t.Destination)
+                .AsQueryable();
             if (!string.IsNullOrEmpty(searchString))
             {
                 bookings = bookings.Where(b => b.Status.Contains(searchString) || b.Traveler.FirstName.Contains(searchString) || b.Traveler.LastName.Contains(searchString));
