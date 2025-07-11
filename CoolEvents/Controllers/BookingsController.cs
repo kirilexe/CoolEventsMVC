@@ -55,8 +55,8 @@ namespace CoolEvents.Controllers
         [Authorize(Roles = "Admin, TravelAgent")]
         public IActionResult Create()
         {
-            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId");
-            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId");
+            ViewData["TravelerId"] = new SelectList(_context.Traveler.Select(t => new { t.TravelerId, FullName = t.FirstName + " " + t.LastName }), "TravelerId", "FullName");
+            ViewData["TripId"] = new SelectList(_context.Trip.Include(tr => tr.Destination).Select(tr => new { tr.TripId, TripName = tr.Destination.City + ", " + tr.Destination.Country }), "TripId", "TripName");
             return View();
         }
 
@@ -73,8 +73,8 @@ namespace CoolEvents.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId", booking.TravelerId);
-            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId", booking.TripId);
+            ViewData["TravelerId"] = new SelectList(_context.Traveler.Select(t => new { t.TravelerId, FullName = t.FirstName + " " + t.LastName }), "TravelerId", "FullName", booking.TravelerId);
+            ViewData["TripId"] = new SelectList(_context.Trip.Include(tr => tr.Destination).Select(tr => new { tr.TripId, TripName = tr.Destination.City + ", " + tr.Destination.Country }), "TripId", "TripName", booking.TripId);
             return View(booking);
         }
 
@@ -92,8 +92,8 @@ namespace CoolEvents.Controllers
             {
                 return NotFound();
             }
-            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId", booking.TravelerId);
-            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId", booking.TripId);
+            ViewData["TravelerId"] = new SelectList(_context.Traveler.Select(t => new { t.TravelerId, FullName = t.FirstName + " " + t.LastName }), "TravelerId", "FullName", booking.TravelerId);
+            ViewData["TripId"] = new SelectList(_context.Trip.Include(tr => tr.Destination).Select(tr => new { tr.TripId, TripName = tr.Destination.City + ", " + tr.Destination.Country }), "TripId", "TripName", booking.TripId);
             return View(booking);
         }
 
@@ -130,8 +130,8 @@ namespace CoolEvents.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TravelerId"] = new SelectList(_context.Traveler, "TravelerId", "TravelerId", booking.TravelerId);
-            ViewData["TripId"] = new SelectList(_context.Trip, "TripId", "TripId", booking.TripId);
+            ViewData["TravelerId"] = new SelectList(_context.Traveler.Select(t => new { t.TravelerId, FullName = t.FirstName + " " + t.LastName }), "TravelerId", "FullName", booking.TravelerId);
+            ViewData["TripId"] = new SelectList(_context.Trip.Include(tr => tr.Destination).Select(tr => new { tr.TripId, TripName = tr.Destination.City + ", " + tr.Destination.Country }), "TripId", "TripName", booking.TripId);
             return View(booking);
         }
 

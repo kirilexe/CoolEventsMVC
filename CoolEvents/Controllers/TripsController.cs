@@ -40,7 +40,7 @@ namespace CoolEvents.Controllers
             }
 
             var trip = await _context.Trip
-                .Include(t => t.Destination)
+                .Include(t => t.Destination.Country)
                 .FirstOrDefaultAsync(m => m.TripId == id);
             if (trip == null)
             {
